@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'mouincmyazure'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5910FC70125942D6BBA9FFFDF693346F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_988135E1728C4302B2587F1081B8F6F1 }}
           package: .

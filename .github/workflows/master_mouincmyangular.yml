@@ -52,4 +52,4 @@ jobs:
           app-name: 'mouincmyangular'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_537F9FC3B52E4354B11E015A7A8A2FB7 }}
-          package: .
+          package: ./dist/my-angular

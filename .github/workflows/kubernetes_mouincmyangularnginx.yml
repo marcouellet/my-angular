@@ -9,6 +9,15 @@ on:
       - kubernetes
   workflow_dispatch:
 
+  # Environment variables available to all jobs and steps in this workflow
+env:
+  REGISTRY_NAME: "mouincnodejs"
+  CLUSTER_NAME: "nodejs"
+  CLUSTER_RESOURCE_GROUP: "docker"
+  NAMESPACE: "angular"
+  SECRET: "mouincnodejs-secret"
+  APP_NAME: "my-angular"
+
 jobs:
   build:
     runs-on: "ubuntu-latest"
@@ -30,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/myangular-nginx:${{ github.sha }}
+          tags: mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/k8s-myangular-nginx:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -41,16 +50,43 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Deploy to Azure Kubernetes Service
-        id: deploy-to-kubernetes-service
-      - uses: Azure/k8s-deploy@v1.4
+      # Set the target Azure Kubernetes Service (AKS) cluster.
+      - uses: azure/aks-set-context@v1
         with:
-          namespace: "myangularnginx"
+          creds: "${{ secrets.AZURE_CREDENTIALS }}"
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+      # Deploy app to AKS
+      - uses: azure/k8s-deploy@v1
+        with:
           manifests: |
-            ./kubernetes/deployment.yaml
-            ./kubernetes/service.yaml
-          images: "mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/myangular-nginx:${{ github.sha }}"
+            ${{ github.workspace }}/manifests/deployment.yaml
+            ${{ github.workspace }}/manifests/service.yaml
+          images: |
+            ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
           imagepullsecrets: |
-            image-pull-secret1
-            image-pull-secret2
-          kubectl-version: "latest"
+            ${{ env.SECRET }}
+          namespace: ${{ env.NAMESPACE }}
+
+      # Create image pull secret for ACR
+      - uses: azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
+          container-registry-username: ${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}
+          container-registry-password: ${{ secrets.AzureAppService_ContainerPassword_44a62f72a8214b33bc4bd15cc1d70f36 }}
+          secret-name: ${{ env.SECRET }}
+          namespace: ${{ env.NAMESPACE }}
+          arguments: --force true
+
+      # Deploy app to AKS
+      - uses: azure/k8s-deploy@v1
+        with:
+          manifests: |
+            ${{ github.workspace }}/manifests/deployment.yaml
+            ${{ github.workspace }}/manifests/service.yaml
+          images: |
+            ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+          imagepullsecrets: |
+            ${{ env.SECRET }}
+          namespace: ${{ env.NAMESPACE }}

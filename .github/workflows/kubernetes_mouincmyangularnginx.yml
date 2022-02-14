@@ -41,11 +41,16 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+      - name: Deploy to Azure Kubernetes Service
+        id: deploy-to-kubernetes-service
+      - uses: Azure/k8s-deploy@v1.4
         with:
-          app-name: "mouinck8smyangularnginx"
-          slot-name: "production"
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_3ac1c7f499c8454ab5fc7da05e00a194 }}
+          namespace: "myangularnginx"
+          manifests: |
+            ./kubernetes/deployment.yaml
+            ./kubernetes/service.yaml
           images: "mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/myangular-nginx:${{ github.sha }}"
+          imagepullsecrets: |
+            image-pull-secret1
+            image-pull-secret2
+          kubectl-version: "latest"

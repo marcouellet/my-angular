@@ -1,4 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy 
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy container app to Azure Web App - mouincmyangularnginx
@@ -50,16 +50,16 @@ jobs:
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_3ac1c7f499c8454ab5fc7da05e00a194 }}
           images: "mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/myangular-nginx:${{ github.sha }}"
 
-      - name: Deploy to Azure Kubernetes Service
-        id: deploy-to-kubernetes-service
-      - uses: Azure/k8s-deploy@v1.4
-        with:
-          namespace: "myangularnginx"
-          manifests: |
-            ./kubernetes/deployment.yaml
-            ./kubernetes/service.yaml
-          images: "mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/myangular-nginx:${{ github.sha }}"
-          imagepullsecrets: |
-            image-pull-secret1
-            image-pull-secret2
-          kubectl-version: "latest"
+      # - name: Deploy to Azure Kubernetes Service
+      #   id: deploy-to-kubernetes-service
+      # - uses: Azure/k8s-deploy@v1.4
+      #   with:
+      #     namespace: "myangularnginx"
+      #     manifests: |
+      #       ./kubernetes/deployment.yaml
+      #       ./kubernetes/service.yaml
+      #     images: "mouincnodejs.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}/myangular-nginx:${{ github.sha }}"
+      #     imagepullsecrets: |
+      #       image-pull-secret1
+      #       image-pull-secret2
+      #     kubectl-version: "latest"

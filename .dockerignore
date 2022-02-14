@@ -10,5 +10,6 @@ docker-compose*
 /docs
 *.zip
 *.md
+*.yaml
 .vscode
 dist/node_modules

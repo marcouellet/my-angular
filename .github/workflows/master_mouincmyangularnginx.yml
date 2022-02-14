@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - mouincmyangularnginx
 on:
   push:
     branches:
-      - master
+      - nginx
   workflow_dispatch:
 
 jobs:

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myangular-nginx
+  labels:
+    app: myangular-nginx
+spec:
+  selector:
+    matchLabels:
+      app: myangular-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myangular-nginx
+    spec:
+      containers:
+        - name: myangular-nginx
+          image: marcouellet/myangular-nginx:latest
+          env:
+            - name: APP_NAME
+              value: "myangular-nginx"
+            - name: TEST_ME
+              value: "Hello, world!"
+            - name: K8_NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: K8_POD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: K8_NS
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PORT
+              value: "80"
+          ports:
+            - containerPort: 80
+              name: myangular-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myangular-nginx
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: myangular-nginx

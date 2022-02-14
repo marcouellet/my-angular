@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myangular-nginx-2
+  name: myangular-nginx
   labels:
-    app: myangular-nginx-2
+    app: myangular-nginx
 spec:
   selector:
     matchLabels:
-      app: myangular-nginx-2
+      app: myangular-nginx
   replicas: 1
   template:
     metadata:
       labels:
-        app: myangular-nginx-2
+        app: myangular-nginx
     spec:
       containers:
-        - name: myangular-nginx-2
-          image: marcouellet/myangular-nginx-2:latest
+        - name: myangular-nginx
+          image: marcouellet/myangular-nginx:latest
           env:
             - name: APP_NAME
-              value: "myangular-nginx-2"
+              value: "myangular-nginx"
             - name: TEST_ME
               value: "Hello, world!"
             - name: K8_NODE
@@ -39,19 +39,19 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: PORT
-              value: "4200"
+              value: "80"
           ports:
-            - containerPort: 4200
-              name: myangular-nginx-2
+            - containerPort: 80
+              name: myangular-nginx
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: myangular-nginx-2
+  name: myangular-nginx
 spec:
   type: LoadBalancer
   ports:
-    - port: 4200
-      targetPort: 4200
+    - port: 80
+      targetPort: 80
   selector:
-    app: myangular-nginx-2
+    app: myangular-nginx

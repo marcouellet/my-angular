@@ -50,20 +50,13 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      # # Login to registry
-      # - name: Log in to registry
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+      # Login to registry
       - name: Log in to registry
-        uses: docker/login-action@v1
+        uses: azure/login@v1
         with:
-          registry: https://mouincnodejs.azurecr.io/
-          username: ${{ secrets.AzureAppService_ContainerUsername_dd5ac53e8e144e628dc4585185bdc415 }}
-          password: ${{ secrets.AzureAppService_ContainerPassword_44a62f72a8214b33bc4bd15cc1d70f36 }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-        # Set the target Azure Kubernetes Service (AKS) cluster.
+      # Set the target Azure Kubernetes Service (AKS) cluster.
       - name: Set the target Azure Kubernetes Service cluster.
         uses: azure/aks-set-context@v2.0
         with:

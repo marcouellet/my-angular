@@ -13,7 +13,7 @@ spec:
         app: my-angular
     spec:
       containers:
-        - image: marcouellet/my-angular:node
+        - image: marcouellet/my-angular
           name: my-angular
 
 ---

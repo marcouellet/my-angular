@@ -2,8 +2,10 @@ name: my-angular
 services:
   my-angular:
     public: true
-    image: okteto.dev/my-angular:latest
-    build: .
+    build:
+    context:
+      dockerfile: Dockerfile
+      target: build
     replicas: 1
     ports:
       - 3000

@@ -6,3 +6,4 @@ RUN npm install
 RUN npm install -g @angular/cli@6.0.8
 
 CMD ng serve --host 0.0.0.0
+EXPOSE 3000

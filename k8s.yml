@@ -13,7 +13,7 @@ spec:
         app: my-angular
     spec:
       containers:
-        - image: marcouellet/my-angular:latest
+        - image: okteto.dev/my-angular:latest
           name: my-angular
 
 ---

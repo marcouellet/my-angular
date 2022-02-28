@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: my-angular-okteto
-          image: marcouellet/my-angular-okteto:latest
+          image: okteto.dev/my-angular:latest
           ports:
-            - containerPort: 80
+            - containerPort: 3000
           imagePullPolicy: Always
 ---
 apiVersion: v1

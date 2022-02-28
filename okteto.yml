@@ -1,0 +1,6 @@
+name: my-angular-deployment
+command: bash
+sync:
+- .:/app
+forward:
+- 9229:9229

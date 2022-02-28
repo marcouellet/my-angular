@@ -1,0 +1,12 @@
+name: my-angular
+services:
+  my-angular:
+    public: true
+    image: okteto.dev/my-angular:latest
+    build: .
+    replicas: 1
+    ports:
+      - 8080
+    resources:
+      cpu: 100m
+      memory: 128Mi

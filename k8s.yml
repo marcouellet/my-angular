@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-angular-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-angular
+  template:
+    metadata:
+      labels:
+        app: my-angular
+    spec:
+      containers:
+        - name: my-angular-okteto
+          image: marcouellet/my-angular-okteto:latest
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: articles-front-service
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - name: "front"
+      port: 80
+  selector:
+    app: articles-front

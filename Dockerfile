@@ -1,10 +1,8 @@
-# stage 1
-FROM node:13.14.0 as node
-WORKDIR /app
+FROM node:10 AS build
+WORKDIR /usr/src/app
 COPY . .
 RUN npm install
-RUN npm install @angular/cli@6.0.8
 RUN npm run build
-EXPOSE 3000
-CMD ["node", "server.js"]
 
+FROM nginx:1.17.1-alpine
+COPY --from=build /usr/src/app/dist/my-angular /usr/share/nginx/html

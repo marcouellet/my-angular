@@ -29,6 +29,6 @@ spec:
   type: ClusterIP
   ports:
     - name: "my-angular"
-      port: 80
+      port: 3000
   selector:
     app: my-angular
